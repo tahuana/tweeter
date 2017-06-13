@@ -30,3 +30,7 @@ textarea {
   font-size: 0.8em;
   line-height: 3;
 }
+
+.fontRed {
+  color: red;
+}
