@@ -47,7 +47,7 @@ function renderTweets(tweets) {
   $("#tweets-container").empty();
 
   // loops through tweets from newer to older
-  for (let i = (tweets.length - 1); i > 0 ; i--) {
+  for (let i = (tweets.length - 1); i >= 0 ; i--) {
 
     // calls createTweetElement for each tweet
     $tweet = createTweetElement(tweets[i]);
@@ -60,6 +60,15 @@ function renderTweets(tweets) {
 
 
 $(document).ready( function() {
+
+  //let the textarea enable automatically when load the page
+  $(".new-tweet").find("textarea").focus();
+
+  //event listener to toggle the new-tweetsection and enable the textarea
+  $("#composeButton").on("click", function(event) {
+    $(".new-tweet").slideToggle( "slow" );
+    $(".new-tweet").find("textarea").focus();
+  });
 
   //event listener to submit button
   $("#submit").on("click", function(event) {
@@ -83,7 +92,6 @@ $(document).ready( function() {
 
       //if text is null, show a message for empty text
       $message.text("Your message is empty!").toggle(true);
-
 
     } else if ($textLength > 140) {
 
@@ -119,7 +127,6 @@ $(document).ready( function() {
       method: 'GET',
       success: function (tweets) {
           renderTweets(tweets);
-          // console.log(tweets);
         },
       error: function () {}
 
