@@ -98,3 +98,9 @@ article > footer > span {
 article:hover .options{
   display: inline;
 }
+
+#message{
+  color: red;
+  text-align: center;
+  margin: 0;
+}

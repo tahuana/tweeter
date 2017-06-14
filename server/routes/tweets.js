@@ -28,6 +28,7 @@ module.exports = function(DataHelpers) {
       user: user,
       content: {
         text: req.body.text
+        // text: $(`${escape(req.body.text)}`)
       },
       created_at: Date.now()
     };

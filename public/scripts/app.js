@@ -42,8 +42,12 @@ function createTweetElement(tweetData) {
 //function that take in an array of tweet objects, call the createTweetElement function above,
 //and use the returned jQuery object to append each one to the #tweets-container section
 function renderTweets(tweets) {
-  // loops through tweets
-  for (let i = 0; i < tweets.length; i++) {
+
+  //clear the container before to read all tweets
+  $("#tweets-container").empty();
+
+  // loops through tweets from newer to older
+  for (let i = (tweets.length - 1); i > 0 ; i--) {
 
     // calls createTweetElement for each tweet
     $tweet = createTweetElement(tweets[i]);
@@ -54,59 +58,77 @@ function renderTweets(tweets) {
 
 }
 
-// Test / driver code (temporary). Eventually will get this from the server.
-var data = [
-  {
-    "user": {
-      "name": "Newton",
-      "avatars": {
-        "small":   "https://vanillicon.com/788e533873e80d2002fa14e1412b4188_50.png",
-        "regular": "https://vanillicon.com/788e533873e80d2002fa14e1412b4188.png",
-        "large":   "https://vanillicon.com/788e533873e80d2002fa14e1412b4188_200.png"
-      },
-      "handle": "@SirIsaac"
-    },
-    "content": {
-      "text": "If I have seen further it is by standing on the shoulders of giants"
-    },
-    "created_at": 1461116232227
-  },
-  {
-    "user": {
-      "name": "Descartes",
-      "avatars": {
-        "small":   "https://vanillicon.com/7b89b0d8280b93e2ba68841436c0bebc_50.png",
-        "regular": "https://vanillicon.com/7b89b0d8280b93e2ba68841436c0bebc.png",
-        "large":   "https://vanillicon.com/7b89b0d8280b93e2ba68841436c0bebc_200.png"
-      },
-      "handle": "@rd" },
-    "content": {
-      "text": "Je pense , donc je suis"
-    },
-    "created_at": 1461113959088
-  },
-  {
-    "user": {
-      "name": "Johann von Goethe",
-      "avatars": {
-        "small":   "https://vanillicon.com/d55cf8e18b47d4baaf60c006a0de39e1_50.png",
-        "regular": "https://vanillicon.com/d55cf8e18b47d4baaf60c006a0de39e1.png",
-        "large":   "https://vanillicon.com/d55cf8e18b47d4baaf60c006a0de39e1_200.png"
-      },
-      "handle": "@johann49"
-    },
-    "content": {
-      "text": "Es ist nichts schrecklicher als eine tätige Unwissenheit."
-    },
-    "created_at": 1461113796368
-  }
-];
-
 
 $(document).ready( function() {
 
-  renderTweets(data);
+  //event listener to submit button
+  $("#submit").on("click", function(event) {
+
+    //prevent to change the page
+    event.preventDefault();
+
+    //get data from the form
+    $textarea = $(this).closest("form").find("textarea");
+    $message = $(this).closest("form").find("#message");
+
+    //prepare data for Ajax calling
+    $data = $textarea.serialize();
+
+    //get the text (without spaces) and its lenght to validate
+    $text = $textarea.val().trim();
+    $textLength = $text.length;
+
+
+    if ($text === "" || $text === null) {
+
+      //if text is null, show a message for empty text
+      $message.text("Your message is empty!").toggle(true);
+
+
+    } else if ($textLength > 140) {
+
+      //if text exceed 140 characters, show a message for too long text
+      $message.text("Your message is too long!").toggle(true);
+
+    } else {
+
+      //validations are ok, tweet will be send, and show in the area for tweets
+      $.ajax ({
+        url:"/tweets/",
+        contentType: "application/x-www-form-urlencoded",
+        method: "POST",
+        data: $data,
+        success: function () {
+          loadTweets();
+        },
+        error: function () {}
+      });
+
+      //hidden the message if it is shown, and clear the textarea
+      $message.text("").toggle(false);
+      $textarea.val("");
+    }
+
+  });
+
+  //function that load tweets from db, and show on screen (call renderTweets function)
+  function loadTweets () {
+
+    $.ajax({
+      url: '/tweets',
+      method: 'GET',
+      success: function (tweets) {
+          renderTweets(tweets);
+          // console.log(tweets);
+        },
+      error: function () {}
+
+    });
+  };
+
+  //start the app showing the tweets
+  loadTweets();
+
 
 });
-
 
