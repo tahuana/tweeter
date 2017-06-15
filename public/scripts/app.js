@@ -94,11 +94,13 @@ $(document).ready( function() {
 
       //if text is null, show a message for empty text
       $message.text("Your message is empty!").toggle(true);
+      $textarea.focus();
 
     } else if ($textLength > 140) {
 
       //if text exceed 140 characters, show a message for too long text
       $message.text("Your message is too long!").toggle(true);
+      $textarea.focus();
 
     } else {
 
