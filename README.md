@@ -3,8 +3,10 @@
 Tweeter is a simple, single-page Twitter clone, that uses HTML5, CSS3, JS, jQuery and AJAX in front-end, and Node, Express and MongoDB in back-end.
 
 ## Final Product
-!["xxx"](https://github.com/tahuana/xxx)
-
+!["Screenshot of the compose tweet"](https://github.com/tahuana/tweetr/blob/master/docs/compose_tweet.png?raw=true)
+!["Screenshot of the compose tweet hidden"](https://github.com/tahuana/tweetr/blob/master/docs/compose_tweet_hidden.png?raw=true)
+!["Screenshot of the empty tweet flashing message"](https://github.com/tahuana/tweetr/blob/master/docs/tweet_empty_message.png?raw=true)
+!["Screenshot of the too long tweet flashing message"](https://github.com/tahuana/tweetr/blob/master/docs/tweet_too_long_message.png?raw=true)
 
 ## Dependencies
 
