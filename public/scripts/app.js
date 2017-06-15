@@ -9,7 +9,7 @@
 function createTweetElement(tweetData) {
 
   //get how many days between today and the date when the tweet was created
-  $date1 = new Date(1461116232227);
+  $date1 = new Date(tweetData.created_at);
   $date2 = new Date();
 
   $timeDiff = Math.abs($date2.getTime() - $date1.getTime());
@@ -47,13 +47,13 @@ function renderTweets(tweets) {
   $("#tweets-container").empty();
 
   // loops through tweets from newer to older
-  for (let i = (tweets.length - 1); i >= 0 ; i--) {
+  for (let i = 0; i < tweets.length ; i++) {
 
     // calls createTweetElement for each tweet
     $tweet = createTweetElement(tweets[i]);
 
     // takes return value and appends it to the tweets container
-    $('#tweets-container').append($tweet);
+    $('#tweets-container').prepend($tweet);
   }
 
 }
