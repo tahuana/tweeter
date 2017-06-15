@@ -79,6 +79,7 @@ $(document).ready( function() {
     //get data from the form
     $textarea = $(this).closest("form").find("textarea");
     $message = $(this).closest("form").find("#message");
+    $counter = $(this).closest("form").find(".counter");
 
     //prepare data for Ajax calling
     $data = $textarea.serialize();
@@ -112,9 +113,10 @@ $(document).ready( function() {
         error: function () {}
       });
 
-      //hidden the message if it is shown, and clear the textarea
+      //hidden the message if it is shown, clear the textarea, and reset the char-counter
       $message.text("").toggle(false);
       $textarea.val("");
+      $counter.text("140");
     }
 
   });
