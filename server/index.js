@@ -10,7 +10,7 @@ const app           = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-// The MongoDB database of tweets. It's a basic object with an array in it.
+// The MongoDB database of tweets.
 const MongoClient = require("mongodb").MongoClient;
 const MONGODB_URI = "mongodb://localhost:27017/tweeter";
 

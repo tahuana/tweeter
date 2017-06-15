@@ -6,13 +6,13 @@
 
 //function that takes in a tweet object
 //and return a tweet <article> element containing the entire HTML structure of the tweet
-function createTweetElement(tweetData) {
+const createTweetElement = (tweetData) => {
 
   //get how many days between today and the date when the tweet was created
-  $date1 = new Date(tweetData.created_at);
-  $date2 = new Date();
+  $dateCreated = new Date(tweetData.created_at);
+  $dateToday = new Date();
 
-  $timeDiff = Math.abs($date2.getTime() - $date1.getTime());
+  $timeDiff = Math.abs($dateToday.getTime() - $dateCreated.getTime());
   $diffDays = Math.ceil($timeDiff / (1000 * 3600 * 24));
 
   //create the tweet html structure
@@ -41,13 +41,13 @@ function createTweetElement(tweetData) {
 
 //function that take in an array of tweet objects, call the createTweetElement function above,
 //and use the returned jQuery object to append each one to the #tweets-container section
-function renderTweets(tweets) {
+const renderTweets = (tweets) => {
 
   //clear the container before to read all tweets
   $("#tweets-container").empty();
 
   // loops through tweets from newer to older
-  for (let i = 0; i < tweets.length ; i++) {
+  for (let i in tweets) {
 
     // calls createTweetElement for each tweet
     $tweet = createTweetElement(tweets[i]);
@@ -69,6 +69,7 @@ $(document).ready( function() {
     $(".new-tweet").slideToggle( "slow" );
     $(".new-tweet").find("textarea").focus();
   });
+
 
   //event listener to submit button
   $("#submit").on("click", function(event) {
@@ -102,37 +103,27 @@ $(document).ready( function() {
     } else {
 
       //validations are ok, tweet will be send, and show in the area for tweets
-      $.ajax ({
-        url:"/tweets/",
-        contentType: "application/x-www-form-urlencoded",
-        method: "POST",
-        data: $data,
-        success: function () {
-          loadTweets();
-        },
-        error: function () {}
-      });
+      $.post("/tweets/", $data)
+        .done(function () {
+                loadTweets();
+              });
 
       //hidden the message if it is shown, clear the textarea, and reset the char-counter
       $message.text("").toggle(false);
-      $textarea.val("");
+      $textarea.val("").focus();
       $counter.text("140");
     }
 
   });
 
   //function that load tweets from db, and show on screen (call renderTweets function)
-  function loadTweets () {
+  const loadTweets = () => {
 
-    $.ajax({
-      url: '/tweets',
-      method: 'GET',
-      success: function (tweets) {
-          renderTweets(tweets);
-        },
-      error: function () {}
+    $.getJSON("/tweets")
+      .done(function (tweets) {
+              renderTweets(tweets);
+            });
 
-    });
   };
 
   //start the app showing the tweets
