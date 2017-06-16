@@ -23,9 +23,9 @@ const createTweetElement = (tweetData) => {
                 `<h2>${tweetData.user.name}</h2>` +
                 `<span>${tweetData.user.handle}</span>` +
               `</header>` +
-              `<div>${tweetData.content.text}</div>` +
+              `<div class="body">${tweetData.content.text}</div>` +
               `<footer>` +
-                `<span>${$diffDays} days ago</span>` +
+                `<span class="daysAgo">${$diffDays} days ago</span>` +
                 `<div class="options">` +
                   `<span><i class="fa fa-flag" aria-hidden="true"></i></span>` +
                   `<span><i class="fa fa-retweet" aria-hidden="true"></i></span>` +
