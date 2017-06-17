@@ -32,6 +32,11 @@ article {
     article footer .daysAgo {
       font-size: 0.8em;
       float: left; }
+    article footer .likes {
+      font-size: 0.8em;
+      color: blue;
+      float: left;
+      padding-left: 10px; }
     article footer .options {
       float: right;
       display: none; }
@@ -40,5 +45,19 @@ article {
 
 article:hover .options {
   display: inline; }
+
+.heart {
+  color: black; }
+
+.heart:hover {
+  cursor: pointer;
+  color: blue; }
+
+.heartLiked {
+  color: blue; }
+
+.heartLiked:hover {
+  cursor: pointer;
+  color: black; }
 
 /*# sourceMappingURL=load-tweets.css.map */

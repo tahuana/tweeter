@@ -50,6 +50,13 @@ article {
       float: left;
     }
 
+    .likes {
+      font-size: 0.8em;
+      color: blue;
+      float: left;
+      padding-left: 10px;
+    }
+
     .options {
       float: right;
       display: none;
@@ -68,4 +75,21 @@ article {
 article:hover .options{
   display: inline;
 }
+
+.heart {
+  color: black;
+}
+.heart:hover {
+  cursor: pointer;
+  color: blue;
+}
+
+.heartLiked {
+  color: blue;
+}
+.heartLiked:hover {
+  cursor: pointer;
+  color: black;
+}
+
 

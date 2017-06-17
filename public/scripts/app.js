@@ -15,8 +15,18 @@ const createTweetElement = (tweetData) => {
   $timeDiff = Math.abs($dateToday.getTime() - $dateCreated.getTime());
   $diffDays = Math.ceil($timeDiff / (1000 * 3600 * 24));
 
-  //create the tweet html structure
-  // $tweet = "<p>teste</p>"
+  //define the class of the heart image
+  //if the tweet was not liked yet, the heart should be black with hover blue (class = heart)
+  //if the tweet was already liked, the colors should be the opposite (blue with hover black => class = heartLiked)
+  $alreadyLiked = tweetData.likes;
+
+  if ($alreadyLiked == 0) {
+    $class = "heart";
+  } else {
+    $class = "heartLiked";
+  }
+
+  //create the structure of tweet to be included in the html
   $tweet = (`<article>` +
               `<header>` +
                 `<img src="${tweetData.user.avatars.small}">` +
@@ -26,10 +36,11 @@ const createTweetElement = (tweetData) => {
               `<div class="body">${tweetData.content.text}</div>` +
               `<footer>` +
                 `<span class="daysAgo">${$diffDays} days ago</span>` +
+                `<span class="likes" data-id="${tweetData._id}" data-total-of-likes="${tweetData.likes}"><b>Likes: ${tweetData.likes}</b></span>` +
                 `<div class="options">` +
                   `<span><i class="fa fa-flag" aria-hidden="true"></i></span>` +
                   `<span><i class="fa fa-retweet" aria-hidden="true"></i></span>` +
-                  `<span><i class="fa fa-heart" aria-hidden="true"></i></span>` +
+                  `<span class="${$class}"><i class="fa fa-heart" aria-hidden="true"></i></span>` +
                 `</div>` +
               `</footer>` +
             `</article>`);
@@ -68,6 +79,51 @@ $(document).ready( function() {
   $("#composeButton").on("click", function(event) {
     $(".new-tweet").slideToggle( "slow" );
     $(".new-tweet").find("textarea").focus();
+  });
+
+
+  //event listener to deal with the like button
+  $("#tweets-container").on("click", ".fa-heart", function(event) {
+
+    //get the tweet ID and the total of likes
+    //this information come from database and was included as html data attribute when the html structure was created (function createTweetElement)
+    //if the user doesn't like it yet, total = 0, otherwise total = 1
+    $tweetID = $(this).closest("footer").find(".likes").data("id");
+    $totalOfLikes = $(this).closest("footer").find(".likes").data("total-of-likes");
+
+    if ($totalOfLikes === 0){
+    //if total of likes = 0, means that the user doesn't like it yet
+    //increment the total like, send a PUT to update the database
+    //and reload the tweets to update the screen with the liking information
+
+      $data = { _id: $tweetID, likes: ($totalOfLikes + 1) }
+
+      $.ajax({
+        method: "PUT",
+        url: "/tweets/edit",
+        data: $data
+      })
+        .done(function() {
+          loadTweets();
+        });
+
+    } else {
+    //if total of likes = 1, means that the user have already liked it
+    //decrement the total like, send a PUT to update the database
+    //and reload the tweets to update the screen with the liking information
+
+      $data = { _id: $tweetID, likes: ($totalOfLikes - 1) }
+
+      $.ajax({
+        method: "PUT",
+        url: "/tweets/edit",
+        data: $data
+      })
+        .done(function() {
+          loadTweets();
+        });
+    }
+
   });
 
 

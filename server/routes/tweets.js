@@ -28,9 +28,9 @@ module.exports = function(DataHelpers) {
       user: user,
       content: {
         text: req.body.text
-        // text: $(`${escape(req.body.text)}`)
       },
-      created_at: Date.now()
+      created_at: Date.now(),
+      likes: 0
     };
 
     DataHelpers.saveTweet(tweet, (err) => {
@@ -41,6 +41,27 @@ module.exports = function(DataHelpers) {
       }
     });
   });
+
+  //route included to update the tweet with liking
+  //get the tweet ID and total of likes from the request send by browser
+  //create the object and call the function to update database
+  tweetsRoutes.put("/edit", function(req, res) {
+
+    const tweet = {
+      "_id": req.body._id,
+      "likes": req.body.likes
+    };
+
+    DataHelpers.updateTweet(tweet, (err) => {
+      if (err) {
+        res.status(500).json({ error: err.message });
+      } else {
+        res.status(201).send();
+      }
+    });
+
+  });
+
 
   return tweetsRoutes;
 
